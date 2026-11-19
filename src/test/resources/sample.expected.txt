@@ -1,0 +1,56 @@
+HashMap (25 entries)
+  ACTIVE = true
+  AMOUNT = 20.00
+  BIG_NUMBER = 123456789012345678901234567890
+  BILL_TO : Customer  (jserialreader.SampleBlobGenerator$Customer)
+    name = "Jane Doe"
+    code = "C-0001"
+    status = Status.PAID
+  BYTES = <byte[3]: 0102FF>
+  CODES : int[] [3]
+    [0] = 7
+    [1] = 8
+    [2] = 9
+  COUNT = 3
+  CREATED = 2023-11-14 22:13:20.000 (Date)
+  CUSTOMER : Customer  (jserialreader.SampleBlobGenerator$Customer)
+    name = "Jane Doe"
+    code = "C-0001"
+    status = Status.PAID
+  DISCOUNT = -1.255
+  DUE = 2023-11-14 (Date)
+  EMPTY = ""
+  FIXED_LIST : ArrayList [2]
+    [0] = "x"
+    [1] = "y"
+  GRADE = 'B'
+  ITEMS : ArrayList [2]
+    [0] : LineItem  (jserialreader.SampleBlobGenerator$LineItem)
+      quantity = 1
+      taxable = true
+      price = 12.50
+      sku = "A-100"
+    [1] : LineItem  (jserialreader.SampleBlobGenerator$LineItem)
+      quantity = 2
+      taxable = false
+      price = 3.75
+      sku = "B-200"
+  LONG_ID = 12345678901
+  META : TreeMap (2 entries)
+    source = "unit-test"
+    version = 2
+  NOTE = "line 1\nline 2\t\"quoted\" \\ end"
+  NOTHING = null
+  ORDER_NO = "ORD-0001"
+  RATE = 0.075
+  SELF_LIST : ArrayList [2]
+    [0] = "first"
+    [1] = <circular reference>
+  SET : LinkedHashSet [2]
+    [0] = "one"
+    [1] = "two"
+  TAGS : String[] [2]
+    [0] = "red"
+    [1] = "blue"
+  UPDATED = 2023-11-14 22:13:20.123 (Timestamp)
+

@@ -1,0 +1,20 @@
+# build output
+build/
+dist/
+lib/
+*.class
+*.jar
+
+# Real blobs often hold customer data and must never be committed.
+# The only tracked blob is the synthetic test fixture.
+*.hex
+*.bin
+blob*.txt
+!src/test/resources/sample.hex
+
+# editors and OS
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db

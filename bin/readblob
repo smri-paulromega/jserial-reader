@@ -1,0 +1,41 @@
+#!/bin/sh
+# readblob - prints Java-serialized data as a readable tree. Run "readblob --help" for usage.
+# Looks for the jar in ../lib (release download) or ../build (source checkout).
+set -eu
+
+# follow symlinks, so a link such as /usr/local/bin/readblob still finds the jar
+SELF=$0
+while [ -h "$SELF" ]; do
+	LINK=$(readlink "$SELF")
+	case $LINK in
+		/*) SELF=$LINK ;;
+		*) SELF=$(dirname "$SELF")/$LINK ;;
+	esac
+done
+APP_HOME=$(cd "$(dirname "$SELF")/.." && pwd)
+
+JAR="$APP_HOME/lib/jserial-reader.jar"
+[ -f "$JAR" ] || JAR="$APP_HOME/build/jserial-reader.jar"
+if [ ! -f "$JAR" ]; then
+	echo "readblob: jserial-reader.jar not found; run $APP_HOME/build.sh first" >&2
+	exit 1
+fi
+
+if [ -n "${JAVA_HOME:-}" ]; then
+	JAVA="$JAVA_HOME/bin/java"
+else
+	JAVA=java
+fi
+if ! command -v "$JAVA" >/dev/null 2>&1; then
+	echo "readblob: Java not found; install Java 8 or later, or set JAVA_HOME" >&2
+	exit 1
+fi
+
+# Git Bash / Cygwin: a Windows java.exe needs a Windows path to the jar
+if command -v cygpath >/dev/null 2>&1; then
+	JAR=$(cygpath -w "$JAR")
+fi
+
+# JAVA_OPTS is split on spaces on purpose, e.g. JAVA_OPTS="-Duser.timezone=UTC -Xmx1g"
+# shellcheck disable=SC2086
+exec "$JAVA" ${JAVA_OPTS:-} -jar "$JAR" "$@"

@@ -1,0 +1,16 @@
+# Normalise text files; pin line endings where the interpreter cares.
+* text=auto
+
+# sh scripts break with CRLF ("bad interpreter: /bin/sh^M")
+*.sh text eol=lf
+bin/readblob text eol=lf
+VERSION text eol=lf
+src/test/resources/* text eol=lf
+
+# cmd.exe misreads labels and blocks in LF-only batch files
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+*.jar binary
+*.class binary
+*.pdf binary

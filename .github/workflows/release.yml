@@ -1,0 +1,45 @@
+# Publishes a GitHub release when a version tag is pushed:
+#   git tag v1.0.0 && git push origin v1.0.0
+# The tag must match the VERSION file.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Check the tag matches VERSION
+        run: test "v$(cat VERSION)" = "$GITHUB_REF_NAME"
+      - name: Build and test
+        run: sh build.sh && sh test.sh
+      - name: Package
+        run: |
+          D="jserial-reader-$(cat VERSION)"
+          mkdir -p "dist/$D/bin" "dist/$D/lib"
+          cp bin/readblob bin/readblob.cmd "dist/$D/bin/"
+          chmod +x "dist/$D/bin/readblob"
+          cp build/jserial-reader.jar "dist/$D/lib/"
+          cp README.md LICENSE CHANGELOG.md install.sh install.cmd install.ps1 "dist/$D/"
+          chmod +x "dist/$D/install.sh"
+          cd dist
+          zip -qr "$D.zip" "$D"
+          tar -czf "$D.tar.gz" "$D"
+          sha256sum "$D.zip" "$D.tar.gz" > SHA256SUMS
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" dist/*.zip dist/*.tar.gz dist/SHA256SUMS \
+            --title "jserial-reader $(cat VERSION)" \
+            --notes "See CHANGELOG.md in the repository for what changed. Download the zip (Windows) or tar.gz (Linux/macOS), extract it, and run install.cmd or install.sh."
